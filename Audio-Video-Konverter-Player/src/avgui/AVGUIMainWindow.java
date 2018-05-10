@@ -66,7 +66,13 @@ public class AVGUIMainWindow extends JFrame {
 		label1.setBounds(53, 45, 120, 120);
 		GUIKontroler.guiButtonComponentInitializer(label1, "playButton_1_up.png");
 		contentPane.add(label1);
-
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 24));
+		textPane.setBounds(205, 47, 560, 115);
+		textPane.setOpaque(false);
+		contentPane.add(textPane);
+		
 		JLabel lblConvert = new JLabel("convert");
 		lblConvert.setBounds(796, 130, 135, 40);
 		contentPane.add(lblConvert);
@@ -76,7 +82,9 @@ public class AVGUIMainWindow extends JFrame {
 		lblOpen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				GUIKontroler.showOpenDialog();
+				GUIKontroler.showOpenDialog(textPane);
+				
+				
 			}
 		});
 		lblOpen.setBounds(796, 40, 135, 40);
@@ -168,11 +176,7 @@ public class AVGUIMainWindow extends JFrame {
 		lblBg.addMouseListener(mml);
 		lblBg.addMouseMotionListener(mml);
 		
-		JTextPane textPane = new JTextPane();
-		textPane.setEditable(false);
-		textPane.setBounds(205, 47, 560, 115);
-		textPane.setOpaque(false);
-		contentPane.add(textPane);
+		
 
 		JLabel lblPlaceholder = new JLabel("PLACEHOLDER");
 		lblPlaceholder.setBounds(200, 42, 570, 125);

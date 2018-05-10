@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 
 import avgui.AVGUIMainWindow;
 
@@ -50,7 +51,7 @@ public class GUIKontroler {
 		return null;		
 	}
 	
-	public static void showOpenDialog() {
+	public static void showOpenDialog(JTextPane textPane) {
 		try {
 			JFileChooser fc = new JFileChooser();
 			int returnVal = fc.showOpenDialog(null);
@@ -65,6 +66,8 @@ public class GUIKontroler {
 				File file = fc.getSelectedFile();
 				mainWindow.setOpenPath(file.getPath());
 				System.out.println(mainWindow.getOpenPath());
+				
+				textPane.setText(fc.getSelectedFile().getName());
 				
 			}	
 		} catch (Exception e1) {
