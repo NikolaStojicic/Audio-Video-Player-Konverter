@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 import avgui.AVGUIMainWindow;
 
@@ -29,6 +30,7 @@ public class GUIKontroler {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					mainWindow = new AVGUIMainWindow();
 					mainWindow.setVisible(true);
 					for (JLabel format : formats)
@@ -51,6 +53,20 @@ public class GUIKontroler {
 		return null;		
 	}
 	
+	public static void saveDialog() {
+		
+		JFileChooser fc = new JFileChooser();
+		int returnVal = fc.showSaveDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		
+			File file = fc.getSelectedFile();
+			mainWindow.setSavePath(file.getPath());
+			System.out.println(mainWindow.getSavePath());
+		}
+			
+					
+	}
+	
 	public static void showOpenDialog(JTextPane textPane) {
 		try {
 			JFileChooser fc = new JFileChooser();
@@ -64,9 +80,7 @@ public class GUIKontroler {
 							return;
 				}
 				File file = fc.getSelectedFile();
-				mainWindow.setOpenPath(file.getPath());
-				System.out.println(mainWindow.getOpenPath());
-				
+				mainWindow.setOpen(file);
 				textPane.setText(fc.getSelectedFile().getName());
 				
 			}	

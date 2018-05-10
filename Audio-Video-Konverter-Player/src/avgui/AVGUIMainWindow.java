@@ -10,14 +10,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import SistemskeOperacije.SOConvertToMp3;
 import avgui.kontroler.GUIKontroler;
 import avgui.util.MoveMouseListener;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.InputFormatException;
+
 import java.awt.Panel;
 import javax.swing.JLabel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.awt.Font;
@@ -31,13 +36,14 @@ public class AVGUIMainWindow extends JFrame {
 
 	private JPanel contentPane;
 	
-	private String openPath = "";
+	private File open;
 	private String savePath = "";
 
 	/**
 	 * Create the frame.
 	 */
 	public AVGUIMainWindow() {
+		setLocationRelativeTo(null);
 		setUndecorated(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,6 +56,7 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
 
 		JLabel label1 = new JLabel("PLAY");
 		label1.addMouseListener(new MouseAdapter() {
@@ -68,12 +75,31 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.add(label1);
 		
 		JTextPane textPane = new JTextPane();
+		textPane.setEditable(false);
 		textPane.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 24));
 		textPane.setBounds(205, 47, 560, 115);
 		textPane.setOpaque(false);
 		contentPane.add(textPane);
 		
 		JLabel lblConvert = new JLabel("convert");
+		lblConvert.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				GUIKontroler.saveDialog();
+				try {
+					SOConvertToMp3.izvrsi(open, savePath+".mp3");
+				} catch (IllegalArgumentException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (InputFormatException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (EncoderException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		lblConvert.setBounds(796, 130, 135, 40);
 		contentPane.add(lblConvert);
 		lblConvert.setPreferredSize(new Dimension(133, 40));
@@ -190,12 +216,12 @@ public class AVGUIMainWindow extends JFrame {
 
 	}
 
-	public String getOpenPath() {
-		return openPath;
+	public void setOpen(File open) {
+		this.open = open;
 	}
-
-	public void setOpenPath(String openPath) {
-		this.openPath = openPath;
+	
+	public File getOpen() {
+		return this.open;
 	}
 
 	public String getSavePath() {
@@ -205,4 +231,8 @@ public class AVGUIMainWindow extends JFrame {
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
 	}
+
+
+
+	
 }
