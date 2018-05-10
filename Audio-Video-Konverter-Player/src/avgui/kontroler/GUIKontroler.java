@@ -4,12 +4,15 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import avgui.AVGUIMainWindow;
 
@@ -34,6 +37,39 @@ public class GUIKontroler {
 				}
 			}
 		});
+	}
+	
+	private static String getFormat(String path) {
+		
+		if (path.endsWith(".mp4")) return "mp4";
+		if (path.endsWith(".avi")) return "avi";
+		if (path.endsWith(".mp3")) return "mp3";
+		if (path.endsWith(".wav")) return "wav";
+		
+		
+		return null;		
+	}
+	
+	public static void showOpenDialog() {
+		try {
+			JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showOpenDialog(null);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if (getFormat(fc.getSelectedFile().getName()) == null) {
+					JOptionPane.showMessageDialog(null,
+							"Nepodrzani format fajla koji ste izabrali",
+							"Greska",
+							JOptionPane.ERROR_MESSAGE);
+							return;
+				}
+				File file = fc.getSelectedFile();
+				mainWindow.setOpenPath(file.getPath());
+				System.out.println(mainWindow.getOpenPath());
+				
+			}	
+		} catch (Exception e1) {
+			
+		}
 	}
 
 	public static boolean togglePlay(JLabel component) {

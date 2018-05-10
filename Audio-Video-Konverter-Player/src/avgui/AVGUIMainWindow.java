@@ -29,6 +29,9 @@ import java.awt.Dimension;
 public class AVGUIMainWindow extends JFrame {
 
 	private JPanel contentPane;
+	
+	private String openPath = "";
+	private String savePath = "";
 
 	/**
 	 * Create the frame.
@@ -69,6 +72,12 @@ public class AVGUIMainWindow extends JFrame {
 		lblConvert.setPreferredSize(new Dimension(133, 40));
 		GUIKontroler.guiButtonComponentInitializer(lblConvert, "convert_up.png");
 		JLabel lblOpen = new JLabel("open");
+		lblOpen.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				GUIKontroler.showOpenDialog();
+			}
+		});
 		lblOpen.setBounds(796, 40, 135, 40);
 		contentPane.add(lblOpen);
 		lblOpen.setPreferredSize(new Dimension(133, 40));
@@ -168,5 +177,21 @@ public class AVGUIMainWindow extends JFrame {
 		GUIKontroler.formats.add(labelwav);
 		GUIKontroler.formats.add(lblAvi);
 
+	}
+
+	public String getOpenPath() {
+		return openPath;
+	}
+
+	public void setOpenPath(String openPath) {
+		this.openPath = openPath;
+	}
+
+	public String getSavePath() {
+		return savePath;
+	}
+
+	public void setSavePath(String savePath) {
+		this.savePath = savePath;
 	}
 }
