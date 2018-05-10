@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.FlowLayout;
 import java.awt.Dimension;
+import javax.swing.JTextPane;
 
 public class AVGUIMainWindow extends JFrame {
 
@@ -157,6 +158,12 @@ public class AVGUIMainWindow extends JFrame {
 		GUIKontroler.guiComponentInitializer(lblBg, "ux.png", 940, 190);
 		lblBg.addMouseListener(mml);
 		lblBg.addMouseMotionListener(mml);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setEditable(false);
+		textPane.setBounds(205, 47, 560, 115);
+		textPane.setOpaque(false);
+		contentPane.add(textPane);
 
 		JLabel lblPlaceholder = new JLabel("PLACEHOLDER");
 		lblPlaceholder.setBounds(200, 42, 570, 125);
