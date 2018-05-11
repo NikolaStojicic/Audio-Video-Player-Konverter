@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
@@ -21,12 +22,19 @@ import SistemskeOperacije.SOConvertToMp3;
 import SistemskeOperacije.SOConvertToMp4;
 import SistemskeOperacije.SOConvertToWav;
 import avgui.AVGUIMainWindow;
+import avgui.anim.Animation;
 import it.sauronsoftware.jave.EncoderException;
 
 public class GUIKontroler {
 
 	public static AVGUIMainWindow mainWindow;
 	public static LinkedList<JLabel> formats = new LinkedList<JLabel>();
+	public static boolean enabled = true;
+	public static JPanel contentPane;
+
+	public static void animate(boolean bool) {
+		GUIKontroler.setAnimate(bool, (JLabel) contentPane.getComponent(0), contentPane);
+	}
 
 	/**
 	 * Launch the application.
@@ -46,25 +54,30 @@ public class GUIKontroler {
 			}
 		});
 	}
-	
+
 	/**
 	 * 
 	 * metoda koja proverava kog je formata uneti fajl.
 	 * 
-	 * @param path predstavlja String koji oznacava putanju do unetog fajla
+	 * @param path
+	 *            predstavlja String koji oznacava putanju do unetog fajla
 	 * @return String sa imenom formata!
 	 */
-	
+
 	public static String getFormat(String path) {
-		
-		if (path.endsWith(".mp4")) return "mp4";
-		if (path.endsWith(".avi")) return "avi";
-		if (path.endsWith(".mp3")) return "mp3";
-		if (path.endsWith(".wav")) return "wav";
-		
-		
-		return null;		
+
+		if (path.endsWith(".mp4"))
+			return "mp4";
+		if (path.endsWith(".avi"))
+			return "avi";
+		if (path.endsWith(".mp3"))
+			return "mp3";
+		if (path.endsWith(".wav"))
+			return "wav";
+
+		return null;
 	}
+
 	
 
 	/*
@@ -83,69 +96,85 @@ public class GUIKontroler {
 
 	/**
 	 * Metoda koja kreira i prikazuje prozor sa odredjenom informacionom porukom
-	 * @param poruka predstavlja String koji predjstavlja poruku koja ce se prikazati u prozoru
+	 * 
+	 * @param poruka
+	 *            predstavlja String koji predjstavlja poruku koja ce se prikazati u
+	 *            prozoru
 	 */
 
-	
 	public static void prikaziPoruku(String poruka) {
-		JOptionPane.showMessageDialog(null,  poruka, "Obavestenje",
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, poruka, "Obavestenje", JOptionPane.INFORMATION_MESSAGE);
 	}
+
 	/**
-	 * Metoda koja kreira i prikazuje prozor sa odredjenom porukom koji upozorava na gresku
-	 * @param poruka predstavlja String koji predjstavlja poruku koja ce se prikazati u prozoru
+	 * Metoda koja kreira i prikazuje prozor sa odredjenom porukom koji upozorava na
+	 * gresku
+	 * 
+	 * @param poruka
+	 *            predstavlja String koji predjstavlja poruku koja ce se prikazati u
+	 *            prozoru
 	 */
-	
+
 	public static void prikaziPorukuGreska(String poruka) {
-		JOptionPane.showMessageDialog(null,  poruka, "Greska",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, poruka, "Greska", JOptionPane.ERROR_MESSAGE);
 	}
-	
+
 	/**
-	 * Metoda koja kreira i prikazuje Save prozor 
-	 * putem kojeg se odredjuje SavePath (adresa na koju ce se konvertovani fajl sacuvati)
+	 * Metoda koja kreira i prikazuje Save prozor putem kojeg se odredjuje SavePath
+	 * (adresa na koju ce se konvertovani fajl sacuvati)
 	 */
-	
+
 	public static void saveDialog() {
-		
+
 		JFileChooser fc = new JFileChooser();
 		int returnVal = fc.showSaveDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-		
+
 			File file = fc.getSelectedFile();
 			mainWindow.setSavePath(file.getPath());
 			System.out.println(mainWindow.getSavePath());
 		}
-			
-					
+
 	}
-	
+
 	/**
-	 * Metoda koja kreira i prikazuje Open prozor 
-	 * putem kojeg se odredjuje parametar Open (atribut glavnog prozora, predstavlja fajl koji ce se kasnije reprodukovati
-	 * ili konvertovati )
-	 * @param textPane predstavlja textPane iz glavnog prozora, u koji se ispisuje ime fajla koji je ucitan
+	 * Metoda koja kreira i prikazuje Open prozor putem kojeg se odredjuje parametar
+	 * Open (atribut glavnog prozora, predstavlja fajl koji ce se kasnije
+	 * reprodukovati ili konvertovati )
+	 * 
+	 * @param textPane
+	 *            predstavlja textPane iz glavnog prozora, u koji se ispisuje ime
+	 *            fajla koji je ucitan
 	 */
-	
+
 	public static void showOpenDialog(JTextPane textPane) {
 		try {
 			JFileChooser fc = new JFileChooser();
 			int returnVal = fc.showOpenDialog(null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-			if (getFormat(fc.getSelectedFile().getName()) == null) {
-					JOptionPane.showMessageDialog(null,
-							"Nepodrzani format fajla koji ste izabrali",
-							"Greska",
+				if (getFormat(fc.getSelectedFile().getName()) == null) {
+					JOptionPane.showMessageDialog(null, "Nepodrzani format fajla koji ste izabrali", "Greska",
 							JOptionPane.ERROR_MESSAGE);
-							return;
+					return;
 				}
 				File file = fc.getSelectedFile();
 				mainWindow.setOpen(file);
 				textPane.setText(fc.getSelectedFile().getName());
-				
-			}	
+
+			}
 		} catch (Exception e1) {
-			
+
+		}
+	}
+
+	public static void setAnimate(boolean bool, JLabel comp, JPanel contentPane) {
+		Animation.label = comp;
+		if (bool) {
+			GUIKontroler.enabled = false;
+			Animation.start();
+		} else {
+			Animation.stop();
+			GUIKontroler.enabled = true;
 		}
 	}
 
@@ -165,7 +194,8 @@ public class GUIKontroler {
 		component.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				GUIKontroler.radioButtons(component, formats);
+				if (enabled)
+					GUIKontroler.radioButtons(component, formats);
 			}
 		});
 	}
@@ -174,12 +204,14 @@ public class GUIKontroler {
 		component.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				guiComponentPressed(component);
+				if (enabled)
+					guiComponentPressed(component);
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				guiComponentPressed(component);
+				if (enabled)
+					guiComponentPressed(component);
 			}
 		});
 	}
@@ -226,7 +258,6 @@ public class GUIKontroler {
 		System.out.println(component.getText().split("_")[0]);
 		return component.getText().split("_")[0];
 	}
-	
 
 	public static String guiGetName(JLabel component) {
 		return component.getText().split("_up.")[0];
@@ -244,14 +275,13 @@ public class GUIKontroler {
 		}
 
 	}
-	
+
 	/**
 	 * metoda koja predstavlja izvucenu funkcionalnost za dugne "Convert"!
 	 */
-	
+
 	public static void Convert() {
-		
-		
+
 		if (mainWindow.getOpen() == null) {
 			prikaziPorukuGreska("Niste odabrali fajl koji zelite da konvertujete!");
 			return;
@@ -271,6 +301,7 @@ public class GUIKontroler {
 
 			try {
 				saveDialog();
+				GUIKontroler.animate(true);
 				SOConvertToMp3.izvrsi(mainWindow.getOpen(), mainWindow.getSavePath() + ".mp3");
 			} catch (IllegalArgumentException | EncoderException e2) {
 				// TODO Auto-generated catch block
@@ -335,12 +366,13 @@ public class GUIKontroler {
 		}
 
 	}
-	
+
 	/**
 	 * Metoda koja pokazuje koje Radio dugme je selektovano
+	 * 
 	 * @return String sa imenom selektovanog dugmeta
 	 */
-	
+
 	public static String getSelctedButton() {
 		for (JLabel jLabel : formats) {
 			if (jLabel.getText().endsWith("down.png")) {
@@ -349,6 +381,5 @@ public class GUIKontroler {
 		}
 		return null;
 	}
-	
-	
+
 }

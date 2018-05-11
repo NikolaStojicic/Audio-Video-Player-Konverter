@@ -15,6 +15,7 @@ import SistemskeOperacije.SOConvertToAvi;
 import SistemskeOperacije.SOConvertToMp3;
 import SistemskeOperacije.SOConvertToMp4;
 import SistemskeOperacije.SOConvertToWav;
+import avgui.anim.Animation;
 import avgui.kontroler.GUIKontroler;
 import avgui.player.AudioPlayer;
 import avgui.player.VideoPlayer;
@@ -48,6 +49,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 
 public class AVGUIMainWindow extends JFrame {
 
@@ -80,8 +82,10 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 
+
 		first = false;
 		pauseTime = 0;
+
 		ap = new AudioPlayer();
 		vp = new VideoPlayer();
 
@@ -89,17 +93,14 @@ public class AVGUIMainWindow extends JFrame {
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
+				if (GUIKontroler.enabled) {
 				boolean isPlay = GUIKontroler.togglePlay(label1);
 
 				String path = open.getPath();
-				if(getOpen() != null) first = true;
+//				if(getOpen() != null) first = true;
 //				if(getOpen() == null) {
 //					
-
-				if (isPlay ) {
-					// Play dugme
-				
-					
+				if (isPlay ) {	
 					if (path.endsWith(".mp3") || path.endsWith(".wav")) {
 						if (pauseTime == 0)
 							ap.playA(path);
@@ -113,16 +114,13 @@ public class AVGUIMainWindow extends JFrame {
 				} else {
 					
 					if (path.endsWith(".mp3") || path.endsWith(".wav"))
-						pauseTime = ap.pause();
-					
-				}
-				
+						pauseTime = ap.pause();	
 //				}else {
 //				GUIKontroler.prikaziPorukuGreska("Uneti fajl ne sme imati null vrednost. Ponovite unos.");
 //				return;
 //			}	
-				
-			}
+				}		
+				}	}
 		});
 
 		label1.setBounds(53, 45, 120, 120);
@@ -141,7 +139,9 @@ public class AVGUIMainWindow extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 
-				GUIKontroler.Convert();
+				if (GUIKontroler.enabled) {
+					GUIKontroler.Convert();
+				}
 
 			}
 		});
@@ -153,7 +153,10 @@ public class AVGUIMainWindow extends JFrame {
 		lblOpen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				GUIKontroler.showOpenDialog(textPane);
+
+				if (GUIKontroler.enabled)
+					GUIKontroler.showOpenDialog(textPane);
+
 
 			}
 		});
@@ -202,6 +205,7 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.add(lblAvi);
 
 		JLabel lblAbout = new JLabel("about");
+
 		lblAbout.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -210,6 +214,7 @@ public class AVGUIMainWindow extends JFrame {
 
 			}
 		});
+
 		lblAbout.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 		lblAbout.setBounds(85, 5, 70, 25);
 		GUIKontroler.guiButtonComponentInitializer(lblAbout, "about_up.png");
@@ -219,7 +224,8 @@ public class AVGUIMainWindow extends JFrame {
 		lblClose.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				System.exit(0);
+				if (GUIKontroler.enabled)
+					System.exit(0);
 			}
 		});
 		lblClose.setBounds(861, 5, 70, 25);
@@ -241,7 +247,8 @@ public class AVGUIMainWindow extends JFrame {
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GUIKontroler.showOpenDialog(textPane);
+				if (GUIKontroler.enabled)
+					GUIKontroler.showOpenDialog(textPane);
 			}
 		});
 		mntmOpen.setIcon(
@@ -252,7 +259,8 @@ public class AVGUIMainWindow extends JFrame {
 		JMenuItem mntmConvert = new JMenuItem("Convert");
 		mntmConvert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GUIKontroler.Convert();
+				if (GUIKontroler.enabled)
+					GUIKontroler.Convert();
 			}
 		});
 		mntmConvert.setIcon(
@@ -263,7 +271,8 @@ public class AVGUIMainWindow extends JFrame {
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				if (GUIKontroler.enabled)
+					System.exit(0);
 			}
 		});
 		mntmExit.setIcon(
@@ -275,7 +284,10 @@ public class AVGUIMainWindow extends JFrame {
 		lblForward.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				ap.rewind(1000000);
+
+				if (GUIKontroler.enabled)
+					ap.rewind(1000000);
+
 			}
 		});
 		lblForward.setBounds(16, 92, 32, 32);
@@ -286,7 +298,10 @@ public class AVGUIMainWindow extends JFrame {
 		lblStop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				ap.stop();
+
+				if (GUIKontroler.enabled)
+					ap.stop();
+
 			}
 		});
 		lblStop.setBounds(17, 50, 32, 32);
@@ -297,7 +312,8 @@ public class AVGUIMainWindow extends JFrame {
 		lblBackward.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				ap.rewind(-1000000);
+				if (GUIKontroler.enabled)
+					ap.rewind(-1000000);
 			}
 		});
 		lblBackward.setBounds(16, 133, 32, 32);
@@ -320,7 +336,7 @@ public class AVGUIMainWindow extends JFrame {
 		GUIKontroler.formats.add(labelmp3);
 		GUIKontroler.formats.add(labelwav);
 		GUIKontroler.formats.add(lblAvi);
-
+		GUIKontroler.contentPane = contentPane;
 	}
 
 	public void setOpen(File open) {
@@ -344,22 +360,27 @@ public class AVGUIMainWindow extends JFrame {
 		component.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 
-				if (SwingUtilities.isLeftMouseButton(e)) {
-					showMenu(e);
-				}
+				if (GUIKontroler.enabled)
+					if (SwingUtilities.isLeftMouseButton(e)) {
+						showMenu(e);
+					}
 
 			}
 
 			public void mousePressed(MouseEvent e) {
+				if (GUIKontroler.enabled)
+					if (SwingUtilities.isLeftMouseButton(e)) {
+						showMenu(e);
+					}
 
-				if (SwingUtilities.isLeftMouseButton(e)) {
-					showMenu(e);
-				}
 
 			}
 
 			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), component.getX() - 10, component.getY() + 20);
+
+				if (GUIKontroler.enabled)
+					popup.show(e.getComponent(), component.getX() - 10, component.getY() + 20);
+
 			}
 		});
 	}
