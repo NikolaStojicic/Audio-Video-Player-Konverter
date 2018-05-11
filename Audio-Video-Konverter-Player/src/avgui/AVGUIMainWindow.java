@@ -15,6 +15,7 @@ import SistemskeOperacije.SOConvertToMp3;
 import SistemskeOperacije.SOConvertToMp4;
 import SistemskeOperacije.SOConvertToWav;
 import avgui.kontroler.GUIKontroler;
+import avgui.player.AudioPlayer;
 import avgui.util.MoveMouseListener;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.InputFormatException;
@@ -42,7 +43,7 @@ public class AVGUIMainWindow extends JFrame {
 	private File open;
 	private String savePath = "";
 	
-	
+	private AudioPlayer ap;
 
 	/**
 	 * Create the frame.
@@ -62,16 +63,26 @@ public class AVGUIMainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
+		
+		ap = new AudioPlayer();
 
 		JLabel label1 = new JLabel("PLAY");
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				boolean isPlay = GUIKontroler.togglePlay(label1);
+				//int pauseState = 0;
 				if (isPlay) {
 					// Play dugme
+					if(savePath.endsWith(".mp3") || savePath.endsWith(".wav")) 
+					//"C:\\Users\\Ivana\\Desktop\\muzika\\Camila Cabello - Havana Audio ft Young Thug.mp3"
+					ap.playA(savePath);
+					
 				} else {
 					// Pause dugme
+					if(savePath.endsWith(".mp3") || savePath.endsWith(".wav"))
+						ap.pause();
+				//pauseState = 1;
 				}
 			}
 		});
@@ -248,16 +259,34 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.add(lblFile);
 
 		JLabel lblForward = new JLabel("forward");
+		lblForward.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			ap.rewind(1000000);
+			}
+		});
 		lblForward.setBounds(16, 92, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(lblForward, "fastforward_up.png");
 		contentPane.add(lblForward);
 
 		JLabel lblStop = new JLabel("stop");
+		lblStop.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			ap.stop();
+			}
+		});
 		lblStop.setBounds(17, 50, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(lblStop, "stop_up.png");
 		contentPane.add(lblStop);
 
 		JLabel lblBackward = new JLabel("backward");
+		lblBackward.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				ap.rewind(-1000000);
+			}
+		});
 		lblBackward.setBounds(16, 133, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(lblBackward, "rewind_up.png");
 		contentPane.add(lblBackward);
