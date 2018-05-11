@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Label;
+import java.awt.MenuItem;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,6 +23,8 @@ import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.InputFormatException;
 
 import java.awt.Panel;
+import java.awt.PopupMenu;
+
 import javax.swing.JLabel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -36,12 +39,21 @@ import java.awt.SystemColor;
 import java.awt.FlowLayout;
 import java.awt.Dimension;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AVGUIMainWindow extends JFrame {
 
 	private JPanel contentPane;
 	
-	private File open;
+	private File open = null;
 	private String savePath = "";
 	
 	private AudioPlayer ap;
@@ -111,79 +123,7 @@ public class AVGUIMainWindow extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				
-				if (GUIKontroler.getSelctedButton().equals("mp3")) {
-				
-					if (GUIKontroler.getFormat(open.getPath())== "mp3") {
-						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
-						return;
-					}
-					
-					try {
-						GUIKontroler.saveDialog();
-						SOConvertToMp3.izvrsi(open, savePath+".mp3");
-					} catch (IllegalArgumentException | EncoderException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-				}
-				
-				if (GUIKontroler.getSelctedButton().equals("wav")) {
-					if (GUIKontroler.getFormat(open.getPath())== "waw") {
-						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
-						return;
-					}
-					try {
-						GUIKontroler.saveDialog();
-						SOConvertToWav.izvrsi(open, savePath+".wav");
-					} catch (IllegalArgumentException | EncoderException e1) {
-						
-						e1.printStackTrace();
-					}
-					
-				}
-				
-				if (GUIKontroler.getSelctedButton().equals("avi")) {
-					
-					if (GUIKontroler.getFormat(open.getPath()) == "mp3" || GUIKontroler.getFormat(open.getPath()) == "waw") {
-						GUIKontroler.prikaziPoruku("nije moguce konvertovati iz audio u video formate!");
-						return;
-					}
-					if (GUIKontroler.getFormat(open.getPath())== "avi") {
-						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
-						return;
-					}
-					
-					try {
-						GUIKontroler.saveDialog();
-						SOConvertToAvi.izvrsi(open, savePath+".avi");
-					} catch (IllegalArgumentException | EncoderException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-						
-					
-					
-				}
-				if (GUIKontroler.getSelctedButton().equals("mp4")) {
-					if (GUIKontroler.getFormat(open.getPath()) == "mp3" || GUIKontroler.getFormat(open.getPath()) == "waw") {
-						GUIKontroler.prikaziPoruku("nije moguce konvertovati iz audio u video formate!");
-						return;
-					}
-					if (GUIKontroler.getFormat(open.getPath())== "mp4") {
-						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
-						return;
-					}
-					
-					
-					try {
-						GUIKontroler.saveDialog();
-						SOConvertToMp4.izvrsi(open, savePath+".mp4");
-					} catch (IllegalArgumentException | EncoderException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				
+				GUIKontroler.Convert();
 				
 				}
 		});
@@ -264,10 +204,46 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.add(lblClose);
 
 		JLabel lblFile = new JLabel("file");
+		lblFile.addMouseListener(new MouseAdapter() {
+			
+		});
 		lblFile.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 		lblFile.setBounds(9, 5, 70, 25);
 		GUIKontroler.guiButtonComponentInitializer(lblFile, "file_up.png");
 		contentPane.add(lblFile);
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		addPopup(lblFile, popupMenu);
+		
+		JMenuItem mntmOpen = new JMenuItem("Open");
+		mntmOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GUIKontroler.showOpenDialog(textPane);
+			}
+		});
+		mntmOpen.setIcon(new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/file.gif")));
+		mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+		popupMenu.add(mntmOpen);
+		
+		JMenuItem mntmConvert = new JMenuItem("Convert");
+		mntmConvert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GUIKontroler.Convert();
+			}
+		});
+		mntmConvert.setIcon(new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
+		mntmConvert.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+		popupMenu.add(mntmConvert);
+		
+		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		mntmExit.setIcon(new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
+		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.ALT_MASK));
+		popupMenu.add(mntmExit);
 
 		JLabel lblForward = new JLabel("forward");
 		lblForward.addMouseListener(new MouseAdapter() {
@@ -342,5 +318,26 @@ public class AVGUIMainWindow extends JFrame {
 
 
 
-	
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mouseReleased (MouseEvent e) {
+				
+					if (SwingUtilities.isLeftMouseButton(e)) {
+					showMenu(e);
+					}
+				
+			}
+			
+			public void mousePressed (MouseEvent e) {
+				
+				if (SwingUtilities.isLeftMouseButton(e)) {
+				showMenu(e);
+				}
+			
+		}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(),component.getX() -10 , component.getY()+20);
+			}
+		});
+	}
 }
