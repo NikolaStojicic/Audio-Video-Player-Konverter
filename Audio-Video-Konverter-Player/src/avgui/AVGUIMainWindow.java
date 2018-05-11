@@ -16,6 +16,7 @@ import SistemskeOperacije.SOConvertToMp4;
 import SistemskeOperacije.SOConvertToWav;
 import avgui.kontroler.GUIKontroler;
 import avgui.player.AudioPlayer;
+import avgui.player.VideoPlayer;
 import avgui.util.MoveMouseListener;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.InputFormatException;
@@ -44,6 +45,8 @@ public class AVGUIMainWindow extends JFrame {
 	private String savePath = "";
 	
 	private AudioPlayer ap;
+	private VideoPlayer vp;
+	private long pauseTime;
 
 	/**
 	 * Create the frame.
@@ -65,27 +68,33 @@ public class AVGUIMainWindow extends JFrame {
 		setLocationRelativeTo(null);
 		
 		ap = new AudioPlayer();
-
+		vp = new VideoPlayer();
+		
 		JLabel label1 = new JLabel("PLAY");
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				boolean isPlay = GUIKontroler.togglePlay(label1);
 				//int pauseState = 0;
+				String path = open.getPath();
 				if (isPlay) {
 					// Play dugme
-					if(savePath.endsWith(".mp3") || savePath.endsWith(".wav")) 
+					if(path.endsWith(".mp3") || path.endsWith(".wav")) 
 					//"C:\\Users\\Ivana\\Desktop\\muzika\\Camila Cabello - Havana Audio ft Young Thug.mp3"
-					ap.playA(savePath);
-					
+					ap.playA(path);
+				//	ap.pauseLocation =0;
+				//	ap.resume(-pauseTime, path);
+//					if(path.endsWith(".mp4") || path.endsWith(".avi"))
+//						vp.playV(, path, contentPane);
 				} else {
 					// Pause dugme
-					if(savePath.endsWith(".mp3") || savePath.endsWith(".wav"))
-						ap.pause();
+					if(path.endsWith(".mp3") || path.endsWith(".wav"))
+					pauseTime =	ap.pause();
 				//pauseState = 1;
 				}
 			}
 		});
+		
 		label1.setBounds(53, 45, 120, 120);
 		GUIKontroler.guiButtonComponentInitializer(label1, "playButton_1_up.png");
 		contentPane.add(label1);
@@ -236,6 +245,8 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.add(lblAvi);
 
 		JLabel lblAbout = new JLabel("about");
+		lblAbout.addMouseListener(new MouseAdapter() {
+		});
 		lblAbout.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 		lblAbout.setBounds(85, 5, 70, 25);
 		GUIKontroler.guiButtonComponentInitializer(lblAbout, "about_up.png");
@@ -317,6 +328,7 @@ public class AVGUIMainWindow extends JFrame {
 	}
 	
 	public File getOpen() {
+		pauseTime = 0;
 		return this.open;
 	}
 

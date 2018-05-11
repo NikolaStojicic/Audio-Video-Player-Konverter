@@ -8,6 +8,10 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import SistemskeOperacije.SOPauseAudio;
+import SistemskeOperacije.SOPlayAudio;
+import SistemskeOperacije.SOResumeAudio;
+import SistemskeOperacije.SOStopAudio;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
@@ -24,76 +28,31 @@ public class AudioPlayer implements PlayerInterface {
 
 	@Override
 	public void playA(String path) {
-		try {
-			fis = new FileInputStream(path);
-			bis = new BufferedInputStream(fis);
-			player = new Player(bis);
-
-			songTotalLength = fis.available(); // imamo punu duzinu pesme
-
-			fileLocation = path + "";
-		} catch (FileNotFoundException e1) {
-
-		} catch (JavaLayerException e1) {
-
-		} catch (IOException e) {
-
-		}
-
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					player.play();
-				} catch (JavaLayerException e) {
-
-				}
-
-			}
-
-		}.start();
+		SOPlayAudio.izvrsi(fis, bis, fileLocation, songTotalLength, path,  player);
 
 	}
-//+1000000
+
+	// +1000000
+	// time in miliseconds
 	@Override
 	public void rewind(long offset) {
 		pause();
-		resume(offset);
+		resumeP(offset);
 
 	}
-	
-
 
 	@Override
-	public void pause() {
-		if (player != null) {
+	public long pause() {
 
-			try {
-
-				pauseLocation = fis.available();
-				player.close();
-
-			} catch (IOException e) {
-
-			}
-
-		}
-
+		return SOPauseAudio.izvrsi( (javax.media.Player) player, pauseLocation, fis);
 	}
 
 	@Override
 	public void stop() {
-		if (player != null) {
-			player.close();
-			pauseLocation = 0;
-			songTotalLength = 0;
-
-		}
-
+		SOStopAudio.izvrsi((javax.media.Player) player, pauseLocation, songTotalLength);
 	}
 
-	@Override
-	public void resume(long offset) {
+	private void resumeP(long offset) {
 		try {
 			fis = new FileInputStream(fileLocation);
 			bis = new BufferedInputStream(fis);
@@ -120,6 +79,12 @@ public class AudioPlayer implements PlayerInterface {
 			}
 
 		}.start();
+
+	}
+
+	@Override
+	public void resume(long offset, String path) {
+		SOResumeAudio.izvrsi(offset, path, fis, bis,  player, songTotalLength, pauseLocation);
 
 	}
 
