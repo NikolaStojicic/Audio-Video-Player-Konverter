@@ -8,10 +8,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import SistemskeOperacije.SOPauseAudio;
-import SistemskeOperacije.SOPlayAudio;
-import SistemskeOperacije.SOResumeAudio;
-import SistemskeOperacije.SOStopAudio;
+
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
