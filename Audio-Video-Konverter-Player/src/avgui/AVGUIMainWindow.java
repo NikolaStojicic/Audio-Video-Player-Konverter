@@ -93,6 +93,11 @@ public class AVGUIMainWindow extends JFrame {
 				
 				if (GUIKontroler.getSelctedButton().equals("mp3")) {
 				
+					if (GUIKontroler.getFormat(open.getPath())== "mp3") {
+						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
+						return;
+					}
+					
 					try {
 						GUIKontroler.saveDialog();
 						SOConvertToMp3.izvrsi(open, savePath+".mp3");
@@ -103,7 +108,10 @@ public class AVGUIMainWindow extends JFrame {
 				}
 				
 				if (GUIKontroler.getSelctedButton().equals("wav")) {
-					
+					if (GUIKontroler.getFormat(open.getPath())== "waw") {
+						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
+						return;
+					}
 					try {
 						GUIKontroler.saveDialog();
 						SOConvertToWav.izvrsi(open, savePath+".wav");
