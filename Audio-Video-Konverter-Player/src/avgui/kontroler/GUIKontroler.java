@@ -42,7 +42,7 @@ public class GUIKontroler {
 		});
 	}
 	
-	private static String getFormat(String path) {
+	public static String getFormat(String path) {
 		
 		if (path.endsWith(".mp4")) return "mp4";
 		if (path.endsWith(".avi")) return "avi";
@@ -51,6 +51,11 @@ public class GUIKontroler {
 		
 		
 		return null;		
+	}
+	
+	public static void prikaziPoruku(String poruka) {
+		JOptionPane.showMessageDialog(null,  poruka, "Obavestenje",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public static void saveDialog() {
@@ -166,6 +171,7 @@ public class GUIKontroler {
 		System.out.println(component.getText().split("_")[0]);
 		return component.getText().split("_")[0];
 	}
+	
 
 	public static String guiGetName(JLabel component) {
 		return component.getText().split("_up.")[0];
@@ -183,4 +189,15 @@ public class GUIKontroler {
 		}
 
 	}
+	
+	public static String getSelctedButton() {
+		for (JLabel jLabel : formats) {
+			if (jLabel.getText().endsWith("down.png")) {
+				return jLabel.getText().split("_")[0];
+			}
+		}
+		return null;
+	}
+	
+	
 }

@@ -14,7 +14,7 @@ import it.sauronsoftware.jave.VideoSize;
 
 public class SOConvertToAvi {
 
-	public void izvrsi(File open, String save) throws IllegalArgumentException, InputFormatException, EncoderException {
+	public static void izvrsi(File open, String save) throws IllegalArgumentException, InputFormatException, EncoderException {
 
 		File target = new File(save);
 		AudioAttributes audio = new AudioAttributes();
@@ -23,12 +23,11 @@ public class SOConvertToAvi {
 		audio.setSamplingRate(new Integer(44100));
 		audio.setChannels(new Integer(2));
 		VideoAttributes video = new VideoAttributes();
-		video.setBitRate(new Integer(16000));
-		video.setFrameRate(new Integer(25));
+		video.setBitRate(new Integer(128000));
+		video.setFrameRate(new Integer(15));
 		video.setCodec("mpeg4");
-		video.setSize(new VideoSize(1024, 720));
 		EncodingAttributes attrs = new EncodingAttributes();
-		attrs.setFormat("avi");
+		attrs.setFormat("mp4");
 		attrs.setAudioAttributes(audio);
 		attrs.setVideoAttributes(video);
 		Encoder encoder = new Encoder();

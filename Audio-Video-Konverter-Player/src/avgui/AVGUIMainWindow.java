@@ -10,7 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import SistemskeOperacije.SOConvertToAvi;
 import SistemskeOperacije.SOConvertToMp3;
+import SistemskeOperacije.SOConvertToMp4;
+import SistemskeOperacije.SOConvertToWav;
 import avgui.kontroler.GUIKontroler;
 import avgui.util.MoveMouseListener;
 import it.sauronsoftware.jave.EncoderException;
@@ -38,6 +41,8 @@ public class AVGUIMainWindow extends JFrame {
 	
 	private File open;
 	private String savePath = "";
+	
+	
 
 	/**
 	 * Create the frame.
@@ -85,20 +90,74 @@ public class AVGUIMainWindow extends JFrame {
 		lblConvert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				GUIKontroler.saveDialog();
-				try {
-					SOConvertToMp3.izvrsi(open, savePath+".mp3");
-				} catch (IllegalArgumentException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (InputFormatException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (EncoderException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				
+				if (GUIKontroler.getSelctedButton().equals("mp3")) {
+				
+					try {
+						GUIKontroler.saveDialog();
+						SOConvertToMp3.izvrsi(open, savePath+".mp3");
+					} catch (IllegalArgumentException | EncoderException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 				}
-			}
+				
+				if (GUIKontroler.getSelctedButton().equals("wav")) {
+					
+					try {
+						GUIKontroler.saveDialog();
+						SOConvertToWav.izvrsi(open, savePath+".wav");
+					} catch (IllegalArgumentException | EncoderException e1) {
+						
+						e1.printStackTrace();
+					}
+					
+				}
+				
+				if (GUIKontroler.getSelctedButton().equals("avi")) {
+					
+					if (GUIKontroler.getFormat(open.getPath()) == "mp3" || GUIKontroler.getFormat(open.getPath()) == "waw") {
+						GUIKontroler.prikaziPoruku("nije moguce konvertovati iz audio u video formate!");
+						return;
+					}
+					if (GUIKontroler.getFormat(open.getPath())== "avi") {
+						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
+						return;
+					}
+					
+					try {
+						GUIKontroler.saveDialog();
+						SOConvertToAvi.izvrsi(open, savePath+".avi");
+					} catch (IllegalArgumentException | EncoderException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+						
+					
+					
+				}
+				if (GUIKontroler.getSelctedButton().equals("mp4")) {
+					if (GUIKontroler.getFormat(open.getPath()) == "mp3" || GUIKontroler.getFormat(open.getPath()) == "waw") {
+						GUIKontroler.prikaziPoruku("nije moguce konvertovati iz audio u video formate!");
+						return;
+					}
+					if (GUIKontroler.getFormat(open.getPath())== "mp4") {
+						GUIKontroler.prikaziPoruku("odabrali ste format koji je isti formatu koji ste ucitali!");
+						return;
+					}
+					
+					
+					try {
+						GUIKontroler.saveDialog();
+						SOConvertToMp4.izvrsi(open, savePath+".mp4");
+					} catch (IllegalArgumentException | EncoderException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+				
+				}
 		});
 		lblConvert.setBounds(796, 130, 135, 40);
 		contentPane.add(lblConvert);

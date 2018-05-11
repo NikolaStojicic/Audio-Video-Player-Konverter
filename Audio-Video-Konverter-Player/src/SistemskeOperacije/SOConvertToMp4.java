@@ -13,7 +13,7 @@ import it.sauronsoftware.jave.VideoAttributes;
 
 public class SOConvertToMp4 {
 
-	public void izvrsi(File open, String save) throws IllegalArgumentException, InputFormatException, EncoderException {
+	public static void izvrsi(File open, String save) throws IllegalArgumentException, InputFormatException, EncoderException {
 		File target = new File(save);
 		AudioAttributes audio = new AudioAttributes();
 		audio.setCodec("libfaac");
@@ -22,7 +22,7 @@ public class SOConvertToMp4 {
 		audio.setChannels(new Integer(2));
 		VideoAttributes video = new VideoAttributes();
 		video.setBitRate(new Integer(16000));
-		video.setFrameRate(new Integer(25));
+		video.setFrameRate(new Integer(15));
 		video.setCodec("mpeg4");
 		// video.setCodec(VideoAttributes.DIRECT_STREAM_COPY);
 		EncodingAttributes attrs = new EncodingAttributes();

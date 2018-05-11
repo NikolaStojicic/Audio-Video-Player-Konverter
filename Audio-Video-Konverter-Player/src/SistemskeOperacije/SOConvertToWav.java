@@ -12,9 +12,10 @@ import it.sauronsoftware.jave.InputFormatException;
 
 public class SOConvertToWav {
 
-	public void izvrsi(File open, String savePath)
+	public static void izvrsi(File open, String savePath)
 			throws IllegalArgumentException, InputFormatException, EncoderException {
-
+		
+		System.out.println("TEST");
 		File target = new File(savePath);
 		AudioAttributes audio = new AudioAttributes();
 		audio.setCodec("libmp3lame");
