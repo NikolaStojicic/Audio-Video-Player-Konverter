@@ -47,6 +47,14 @@ public class GUIKontroler {
 		});
 	}
 	
+	/**
+	 * 
+	 * metoda koja proverava kog je formata uneti fajl.
+	 * 
+	 * @param path predstavlja String koji oznacava putanju do unetog fajla
+	 * @return String sa imenom formata!
+	 */
+	
 	public static String getFormat(String path) {
 		
 		if (path.endsWith(".mp4")) return "mp4";
@@ -58,15 +66,29 @@ public class GUIKontroler {
 		return null;		
 	}
 	
+	/**
+	 * Metoda koja kreira i prikazuje prozor sa odredjenom informacionom porukom
+	 * @param poruka predstavlja String koji predjstavlja poruku koja ce se prikazati u prozoru
+	 */
+	
 	public static void prikaziPoruku(String poruka) {
 		JOptionPane.showMessageDialog(null,  poruka, "Obavestenje",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
+	/**
+	 * Metoda koja kreira i prikazuje prozor sa odredjenom porukom koji upozorava na gresku
+	 * @param poruka predstavlja String koji predjstavlja poruku koja ce se prikazati u prozoru
+	 */
 	
 	public static void prikaziPorukuGreska(String poruka) {
 		JOptionPane.showMessageDialog(null,  poruka, "Greska",
 				JOptionPane.ERROR_MESSAGE);
 	}
+	
+	/**
+	 * Metoda koja kreira i prikazuje Save prozor 
+	 * putem kojeg se odredjuje SavePath (adresa na koju ce se konvertovani fajl sacuvati)
+	 */
 	
 	public static void saveDialog() {
 		
@@ -81,6 +103,13 @@ public class GUIKontroler {
 			
 					
 	}
+	
+	/**
+	 * Metoda koja kreira i prikazuje Open prozor 
+	 * putem kojeg se odredjuje parametar Open (atribut glavnog prozora, predstavlja fajl koji ce se kasnije reprodukovati
+	 * ili konvertovati )
+	 * @param textPane predstavlja textPane iz glavnog prozora, u koji se ispisuje ime fajla koji je ucitan
+	 */
 	
 	public static void showOpenDialog(JTextPane textPane) {
 		try {
@@ -200,6 +229,10 @@ public class GUIKontroler {
 
 	}
 	
+	/**
+	 * metoda koja predstavlja izvucenu funkcionalnost za dugne "Convert"!
+	 */
+	
 	public static void Convert() {
 		
 		
@@ -287,7 +320,10 @@ public class GUIKontroler {
 
 	}
 	
-	
+	/**
+	 * Metoda koja pokazuje koje Radio dugme je selektovano
+	 * @return String sa imenom selektovanog dugmeta
+	 */
 	
 	public static String getSelctedButton() {
 		for (JLabel jLabel : formats) {
