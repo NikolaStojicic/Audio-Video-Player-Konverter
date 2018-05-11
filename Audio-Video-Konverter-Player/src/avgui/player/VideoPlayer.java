@@ -41,9 +41,7 @@ public class VideoPlayer implements PlayerInterface{
 			// control all the interactions with user
 			 emp = mpf.newEmbeddedMediaPlayer(new Win32FullScreenStrategy(f));
 			emp.setVideoSurface(mpf.newVideoSurface(c));
-			// hide the cursor
-			// emp.setEnableMouseInputHandling(false);
-			// disable the keyboard
+		
 			emp.setEnableKeyInputHandling(false);
 
 			String file = path;

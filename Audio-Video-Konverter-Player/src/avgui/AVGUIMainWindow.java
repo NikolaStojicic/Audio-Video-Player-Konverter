@@ -186,6 +186,12 @@ public class AVGUIMainWindow extends JFrame {
 
 		JLabel lblAbout = new JLabel("about");
 		lblAbout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			
+				GUIKontroler.prikaziPorukuAbout();
+			
+			}
 		});
 		lblAbout.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 		lblAbout.setBounds(85, 5, 70, 25);

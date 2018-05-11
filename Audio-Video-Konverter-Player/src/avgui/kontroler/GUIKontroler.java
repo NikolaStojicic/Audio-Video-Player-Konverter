@@ -58,6 +58,17 @@ public class GUIKontroler {
 		return null;		
 	}
 	
+	public static void prikaziPorukuAbout() {
+		JOptionPane.showMessageDialog(null,
+				"Aplikacija Audio-Video-Converter-Player\n "
+				+ "Omoguceno konvertovanje video i audio falja u fajlove odredjenog\n "
+				+ "formata kao i preslisavanje ucitanog audio fajla.\n "
+				+ "Autori: Nikola Stojicic, Nikola Kojic i Ivana Todorovic\n",
+				"O programu",
+				JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+	
 	public static void prikaziPoruku(String poruka) {
 		JOptionPane.showMessageDialog(null,  poruka, "Obavestenje",
 				JOptionPane.INFORMATION_MESSAGE);
