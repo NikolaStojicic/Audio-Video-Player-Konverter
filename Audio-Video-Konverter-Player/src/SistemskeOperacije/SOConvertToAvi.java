@@ -3,6 +3,8 @@ package SistemskeOperacije;
 import java.io.File;
 
 import javax.swing.JOptionPane;
+
+import avgui.kontroler.GUIKontroler;
 import it.sauronsoftware.jave.AudioAttributes;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
@@ -50,9 +52,10 @@ public class SOConvertToAvi {
 		attrs.setVideoAttributes(video);
 		Encoder encoder = new Encoder();
 		encoder.encode(open, target, attrs);
-
+		GUIKontroler.animate(false);
 		JOptionPane.showMessageDialog(null, "Fajl " + open.getName() + " uspesno konvertovan u .avi!", "Obavestenje",
 				JOptionPane.INFORMATION_MESSAGE);
+		
 
 	}
 
