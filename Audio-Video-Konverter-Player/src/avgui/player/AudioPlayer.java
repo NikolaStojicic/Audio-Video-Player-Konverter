@@ -28,7 +28,33 @@ public class AudioPlayer implements PlayerInterface {
 
 	@Override
 	public void playA(String path) {
-		SOPlayAudio.izvrsi(fis, bis, fileLocation, songTotalLength, path,  player);
+		try {
+			fis = new FileInputStream(path);
+			bis = new java.io.BufferedInputStream(fis);
+			player = new Player(bis);
+			songTotalLength = fis.available(); // imamo punu duzinu pesme
+
+			fileLocation = path + "";
+		} catch (FileNotFoundException e1) {
+
+		} catch (JavaLayerException e1) {
+
+		} catch (IOException e) {
+
+		}
+
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					player.play();
+				} catch (JavaLayerException e) {
+
+				}
+
+			}
+
+		}.start();
 
 	}
 
@@ -44,12 +70,29 @@ public class AudioPlayer implements PlayerInterface {
 	@Override
 	public long pause() {
 
-		return SOPauseAudio.izvrsi( (javax.media.Player) player, pauseLocation, fis);
+		if (player != null) {
+
+			try {
+
+				pauseLocation = fis.available();
+				player.close();
+
+			} catch (IOException e) {
+
+			}
+
+		}
+		return pauseLocation;
 	}
 
 	@Override
 	public void stop() {
-		SOStopAudio.izvrsi((javax.media.Player) player, pauseLocation, songTotalLength);
+		if (player != null) {
+			player.close();
+			pauseLocation = 0;
+			songTotalLength = 0;
+
+		}
 	}
 
 	private void resumeP(long offset) {
@@ -84,7 +127,32 @@ public class AudioPlayer implements PlayerInterface {
 
 	@Override
 	public void resume(long offset, String path) {
-		SOResumeAudio.izvrsi(offset, path, fis, bis,  player, songTotalLength, pauseLocation);
+		try {
+			fis = new FileInputStream(path);
+			bis = new BufferedInputStream(fis);
+			player = new Player(bis);
+
+			fis.skip(songTotalLength - pauseLocation + offset);
+		} catch (FileNotFoundException e1) {
+
+		} catch (JavaLayerException e1) {
+
+		} catch (IOException e) {
+
+		}
+
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					player.play();
+				} catch (JavaLayerException e) {
+
+				}
+
+			}
+
+		}.start();
 
 	}
 

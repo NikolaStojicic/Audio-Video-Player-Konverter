@@ -52,13 +52,14 @@ import java.awt.event.ActionEvent;
 public class AVGUIMainWindow extends JFrame {
 
 	private JPanel contentPane;
-	
+
 	private File open = null;
 	private String savePath = "";
-	
+
 	private AudioPlayer ap;
 	private VideoPlayer vp;
 	private long pauseTime;
+	boolean first;
 
 	/**
 	 * Create the frame.
@@ -78,54 +79,71 @@ public class AVGUIMainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
-		
+
+		first = false;
+		pauseTime = 0;
 		ap = new AudioPlayer();
 		vp = new VideoPlayer();
-		
+
 		JLabel label1 = new JLabel("PLAY");
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				boolean isPlay = GUIKontroler.togglePlay(label1);
-				//int pauseState = 0;
+
 				String path = open.getPath();
-				if (isPlay) {
+				if(getOpen() != null) first = true;
+//				if(getOpen() == null) {
+//					
+
+				if (isPlay ) {
 					// Play dugme
-					if(path.endsWith(".mp3") || path.endsWith(".wav")) 
-					//"C:\\Users\\Ivana\\Desktop\\muzika\\Camila Cabello - Havana Audio ft Young Thug.mp3"
-					ap.playA(path);
-				//	ap.pauseLocation =0;
-				//	ap.resume(-pauseTime, path);
-//					if(path.endsWith(".mp4") || path.endsWith(".avi"))
-//						vp.playV(, path, contentPane);
+				
+					
+					if (path.endsWith(".mp3") || path.endsWith(".wav")) {
+						if (pauseTime == 0)
+							ap.playA(path);
+						else
+							ap.rewind(0);
+					}else {
+						GUIKontroler.prikaziPorukuGreska("Uneti falj moze biti mp3 ili wav.");
+					return;
+					}
+					
 				} else {
-					// Pause dugme
-					if(path.endsWith(".mp3") || path.endsWith(".wav"))
-					pauseTime =	ap.pause();
-				//pauseState = 1;
+					
+					if (path.endsWith(".mp3") || path.endsWith(".wav"))
+						pauseTime = ap.pause();
+					
 				}
+				
+//				}else {
+//				GUIKontroler.prikaziPorukuGreska("Uneti fajl ne sme imati null vrednost. Ponovite unos.");
+//				return;
+//			}	
+				
 			}
 		});
-		
+
 		label1.setBounds(53, 45, 120, 120);
 		GUIKontroler.guiButtonComponentInitializer(label1, "playButton_1_up.png");
 		contentPane.add(label1);
-		
+
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
 		textPane.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 24));
 		textPane.setBounds(205, 47, 560, 115);
 		textPane.setOpaque(false);
 		contentPane.add(textPane);
-		
+
 		JLabel lblConvert = new JLabel("convert");
 		lblConvert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+
 				GUIKontroler.Convert();
-				
-				}
+
+			}
 		});
 		lblConvert.setBounds(796, 130, 135, 40);
 		contentPane.add(lblConvert);
@@ -136,8 +154,7 @@ public class AVGUIMainWindow extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				GUIKontroler.showOpenDialog(textPane);
-				
-				
+
 			}
 		});
 		lblOpen.setBounds(796, 40, 135, 40);
@@ -188,9 +205,9 @@ public class AVGUIMainWindow extends JFrame {
 		lblAbout.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-			
+
 				GUIKontroler.prikaziPorukuAbout();
-			
+
 			}
 		});
 		lblAbout.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
@@ -211,43 +228,46 @@ public class AVGUIMainWindow extends JFrame {
 
 		JLabel lblFile = new JLabel("file");
 		lblFile.addMouseListener(new MouseAdapter() {
-			
+
 		});
 		lblFile.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 		lblFile.setBounds(9, 5, 70, 25);
 		GUIKontroler.guiButtonComponentInitializer(lblFile, "file_up.png");
 		contentPane.add(lblFile);
-		
+
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(lblFile, popupMenu);
-		
+
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GUIKontroler.showOpenDialog(textPane);
 			}
 		});
-		mntmOpen.setIcon(new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/file.gif")));
+		mntmOpen.setIcon(
+				new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/file.gif")));
 		mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		popupMenu.add(mntmOpen);
-		
+
 		JMenuItem mntmConvert = new JMenuItem("Convert");
 		mntmConvert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				GUIKontroler.Convert();
 			}
 		});
-		mntmConvert.setIcon(new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
+		mntmConvert.setIcon(
+				new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
 		mntmConvert.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		popupMenu.add(mntmConvert);
-		
+
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		mntmExit.setIcon(new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
+		mntmExit.setIcon(
+				new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
 		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.ALT_MASK));
 		popupMenu.add(mntmExit);
 
@@ -255,7 +275,7 @@ public class AVGUIMainWindow extends JFrame {
 		lblForward.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-			ap.rewind(1000000);
+				ap.rewind(1000000);
 			}
 		});
 		lblForward.setBounds(16, 92, 32, 32);
@@ -266,7 +286,7 @@ public class AVGUIMainWindow extends JFrame {
 		lblStop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-			ap.stop();
+				ap.stop();
 			}
 		});
 		lblStop.setBounds(17, 50, 32, 32);
@@ -290,8 +310,6 @@ public class AVGUIMainWindow extends JFrame {
 		GUIKontroler.guiComponentInitializer(lblBg, "ux.png", 940, 190);
 		lblBg.addMouseListener(mml);
 		lblBg.addMouseMotionListener(mml);
-		
-		
 
 		JLabel lblPlaceholder = new JLabel("PLACEHOLDER");
 		lblPlaceholder.setBounds(200, 42, 570, 125);
@@ -308,7 +326,7 @@ public class AVGUIMainWindow extends JFrame {
 	public void setOpen(File open) {
 		this.open = open;
 	}
-	
+
 	public File getOpen() {
 		pauseTime = 0;
 		return this.open;
@@ -322,27 +340,26 @@ public class AVGUIMainWindow extends JFrame {
 		this.savePath = savePath;
 	}
 
-
-
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
-			public void mouseReleased (MouseEvent e) {
-				
-					if (SwingUtilities.isLeftMouseButton(e)) {
-					showMenu(e);
-					}
-				
-			}
-			
-			public void mousePressed (MouseEvent e) {
-				
+			public void mouseReleased(MouseEvent e) {
+
 				if (SwingUtilities.isLeftMouseButton(e)) {
-				showMenu(e);
+					showMenu(e);
 				}
-			
-		}
+
+			}
+
+			public void mousePressed(MouseEvent e) {
+
+				if (SwingUtilities.isLeftMouseButton(e)) {
+					showMenu(e);
+				}
+
+			}
+
 			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(),component.getX() -10 , component.getY()+20);
+				popup.show(e.getComponent(), component.getX() - 10, component.getY() + 20);
 			}
 		});
 	}
