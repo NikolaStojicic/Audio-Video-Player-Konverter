@@ -11,30 +11,41 @@ import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
 import it.sauronsoftware.jave.InputFormatException;
 import it.sauronsoftware.jave.VideoAttributes;
+
 /**
- * Klasa koja predstavlja izdvojenu klasu sa sistemsku operaciju konvertovanja u .Avi format!
+ * Klasa koja predstavlja izdvojenu klasu sa sistemsku operaciju konvertovanja u
+ * .Avi format!
+ * 
  * @author NikolaKojic997
  */
 
 public class SOConvertToAvi {
-	
+
 	/**
 	 * 
 	 * Metoda koja konvertuje fajl iz .mp4 formata u .avi format
 	 * 
-	 * @param open predstavlja promenjivu tipa File koja oznacava Fajl koji ce se kasnije ili reprodukovati ili 
-	 * koji ce se konvertovati u neki drugi format! 
-	 * @param save predstavlja promenjivu tipa String koja oznacava putanju do mesta 
-	 * na koje se konvertovani fajl treba sacuvati
-	 * @throws IllegalArgumentException metoda baca IllegalArgumentException ukoliko je u metodu "encode" kao parametar prosledjen 
-	 * nepodrzani format
-	 * @throws InputFormatException metoda baca InputFormatException ukoliko je u metodu "encode" kao parametar prosledjen 
-	 * nepodrzani format
-	 * @throws EncoderException metoda baca EncoderException ukoliko metoda "encode" koja se izvrsava nad objektom
-	 * tipa Encoder nije u mogucnosti da se izvrsi.
+	 * @param open
+	 *            predstavlja promenjivu tipa File koja oznacava Fajl koji ce se
+	 *            kasnije ili reprodukovati ili koji ce se konvertovati u neki drugi
+	 *            format!
+	 * @param save
+	 *            predstavlja promenjivu tipa String koja oznacava putanju do mesta
+	 *            na koje se konvertovani fajl treba sacuvati
+	 * @throws IllegalArgumentException
+	 *             metoda baca IllegalArgumentException ukoliko je u metodu "encode"
+	 *             kao parametar prosledjen nepodrzani format
+	 * @throws InputFormatException
+	 *             metoda baca InputFormatException ukoliko je u metodu "encode" kao
+	 *             parametar prosledjen nepodrzani format
+	 * @throws EncoderException
+	 *             metoda baca EncoderException ukoliko metoda "encode" koja se
+	 *             izvrsava nad objektom tipa Encoder nije u mogucnosti da se
+	 *             izvrsi.
 	 */
 
-	public static void izvrsi(File open, String save) throws IllegalArgumentException, InputFormatException, EncoderException {
+	public static void izvrsi(File open, String save)
+			throws IllegalArgumentException, InputFormatException, EncoderException {
 
 		File target = new File(save);
 		AudioAttributes audio = new AudioAttributes();
