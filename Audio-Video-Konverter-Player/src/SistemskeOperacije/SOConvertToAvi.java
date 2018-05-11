@@ -55,7 +55,6 @@ public class SOConvertToAvi {
 		GUIKontroler.animate(false);
 		JOptionPane.showMessageDialog(null, "Fajl " + open.getName() + " uspesno konvertovan u .avi!", "Obavestenje",
 				JOptionPane.INFORMATION_MESSAGE);
-		
 
 	}
 

@@ -33,7 +33,7 @@ public class GUIKontroler {
 	public static JPanel contentPane;
 
 	public static void animate(boolean bool) {
-		GUIKontroler.setAnimate(true, (JLabel) contentPane.getComponent(0), contentPane);
+		GUIKontroler.setAnimate(bool, (JLabel) contentPane.getComponent(0), contentPane);
 	}
 
 	/**
