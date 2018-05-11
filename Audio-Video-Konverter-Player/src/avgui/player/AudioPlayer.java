@@ -4,10 +4,10 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.OffsetDateTime;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
@@ -18,11 +18,31 @@ public class AudioPlayer implements PlayerInterface {
 	FileInputStream fis;
 	BufferedInputStream bis;
 
+	/**
+	 * Promenljiva koji predstavlja vrednost na kojoj je pesma pauzirana.
+	 */
 	public long pauseLocation;
+	/**
+	 * Promenljiva koja predstavlja celu duzinu pesme.
+	 */
 	public long songTotalLength;
+	/**
+	 * Promenljiva koja predstavlja vrednost od koje ce se nastaviti pesma, tako da
+	 * bude premotana.
+	 */
 	public int rewindLocation;
+	/**
+	 * Promenljiva koja predstavlja putanju odabrane pesme.
+	 */
 	public String fileLocation;
 
+	/**
+	 * Metoda koja treba da pusti odabranu pesmu.
+	 * 
+	 * @param path
+	 *            predstavlja String koji predstavlja putanju pesme koja ce se
+	 *            pustiti
+	 */
 	@Override
 	public void playA(String path) {
 		try {
@@ -57,6 +77,16 @@ public class AudioPlayer implements PlayerInterface {
 
 	// +1000000
 	// time in miliseconds
+	/**
+	 * Metoda koja treba da premota unapred ili unazad pesmu koja je pustena za
+	 * odredjeno vreme.
+	 * 
+	 * @param offset
+	 *            predstavlja podatak tipa long koji predstavlja odredjeni broj
+	 *            milisekundi za koje ce data pesma biti premotana unapred (ukoliko
+	 *            offset ima pozitivni znak) ili unazad (ukoliko je offset
+	 *            negativan)
+	 */
 	@Override
 	public void rewind(long offset) {
 		pause();
@@ -64,6 +94,12 @@ public class AudioPlayer implements PlayerInterface {
 
 	}
 
+	/**
+	 * Metoda koja treba da pauzira pesmu koja se tom trenutku slusa.
+	 * 
+	 * @return pauseLocation koji predstavlja podatak tipa long koji predstavlja
+	 *         vreme na kome je zaustavljena pesma
+	 */
 	@Override
 	public long pause() {
 
@@ -82,6 +118,10 @@ public class AudioPlayer implements PlayerInterface {
 		return pauseLocation;
 	}
 
+	/**
+	 * Metoda koja treba da stopira pesmu koja se slusala u datom trenutku.
+	 * 
+	 */
 	@Override
 	public void stop() {
 		if (player != null) {
@@ -91,6 +131,15 @@ public class AudioPlayer implements PlayerInterface {
 
 		}
 	}
+
+	/**
+	 * Pomocna metoda koja omogucava premotavanje pesme.
+	 * 
+	 * @param offset
+	 *            predstavlja podatak tipa long koji predstvalja za koliko ce se
+	 *            data pesma premotati unapred ili unazad (pozitivan offset za
+	 *            premotavanje unapred i negativan za premotavanje unazad)
+	 */
 
 	private void resumeP(long offset) {
 		try {
@@ -122,6 +171,17 @@ public class AudioPlayer implements PlayerInterface {
 
 	}
 
+	/**
+	 * Metoda koja treba da nastavi pesmusa mesta gde je pauzirana.
+	 * 
+	 * @param offset
+	 *            predstavlja podatak tipa long koji nam omogucava da premotamo
+	 *            pesmu
+	 * 
+	 * @param path
+	 *            predstavlja String koji predstavlja putanju odabrane pesme koju
+	 *            zelimo da pustimo
+	 */
 	@Override
 	public void resume(long offset, String path) {
 		try {

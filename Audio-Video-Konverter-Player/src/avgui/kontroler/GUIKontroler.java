@@ -80,9 +80,12 @@ public class GUIKontroler {
 
 	
 
-	/*
+	
+	/**
 	 * Metoda koja kreira i prikazuje prozor sa  porukom o programu
-	 * */
+	 * 
+	 */
+
 	public static void prikaziPorukuAbout() {
 		JOptionPane.showMessageDialog(null,
 				"Aplikacija Audio-Video-Converter-Player\n "

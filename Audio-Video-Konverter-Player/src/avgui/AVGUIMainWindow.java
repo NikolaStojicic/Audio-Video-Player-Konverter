@@ -286,7 +286,7 @@ public class AVGUIMainWindow extends JFrame {
 			public void mouseReleased(MouseEvent e) {
 
 				if (GUIKontroler.enabled)
-					ap.rewind(1000000);
+					ap.rewind(100000);
 
 			}
 		});
@@ -313,7 +313,7 @@ public class AVGUIMainWindow extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (GUIKontroler.enabled)
-					ap.rewind(-1000000);
+					ap.rewind(-100000);
 			}
 		});
 		lblBackward.setBounds(16, 133, 32, 32);
