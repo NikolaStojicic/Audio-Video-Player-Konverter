@@ -163,7 +163,7 @@ public class GUIKontroler {
 				File file = fc.getSelectedFile();
 				mainWindow.setOpen(file);
 				textPane.setText(fc.getSelectedFile().getName());
-
+				AVGUIMainWindow.pauseTime1 = 0;
 			}
 		} catch (Exception e1) {
 

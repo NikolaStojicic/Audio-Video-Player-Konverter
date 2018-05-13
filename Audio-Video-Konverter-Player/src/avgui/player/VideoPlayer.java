@@ -31,7 +31,7 @@ public class VideoPlayer implements PlayerInterface{
 			f.add(p);
 			
 		//	try {
-				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\Program Files\\VideoLAN\\VLC");
+				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "lib/vlcj-3.0.1-dist/vlcj-3.0.1-dist/vlcj-3.0.1");
 
 				Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 				// inicijalizacija Media Player

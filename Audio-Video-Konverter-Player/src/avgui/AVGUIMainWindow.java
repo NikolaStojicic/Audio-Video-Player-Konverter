@@ -1,7 +1,8 @@
 package avgui;
 
-import java.awt.BorderLayout;
+//import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Label;
@@ -32,6 +33,7 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.awt.Font;
@@ -57,10 +59,11 @@ public class AVGUIMainWindow extends JFrame {
 
 	private File open = null;
 	private String savePath = "";
-
+	public JLabel label1;
 	private AudioPlayer ap;
 	private VideoPlayer vp;
-	private long pauseTime;
+	private static long pauseTime;
+	public static long pauseTime1;
 	boolean first;
 
 	/**
@@ -82,55 +85,48 @@ public class AVGUIMainWindow extends JFrame {
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 
-
 		first = false;
-		pauseTime = 0;
 
 		ap = new AudioPlayer();
 		vp = new VideoPlayer();
 
-		JLabel label1 = new JLabel("PLAY");
+		label1 = new JLabel("PLAY");
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				if (GUIKontroler.enabled) {
-				boolean isPlay = GUIKontroler.togglePlay(label1);
+				if (GUIKontroler.enabled && getOpen() != null) {
+					boolean isPlay = GUIKontroler.togglePlay(label1);
 
-				String path = open.getPath();
-//				if(getOpen() != null) first = true;
-//				if(getOpen() == null) {
-//					
-				if (isPlay ) {	
-					if (path.endsWith(".mp3") || path.endsWith(".wav")) {
-						if (pauseTime == 0)
-							ap.playA(path);
-						else
-							ap.rewind(0);
-					}else {
-						GUIKontroler.prikaziPorukuGreska("Uneti falj moze biti mp3 ili wav.");
-					return;
+					String path = open.getPath();
+					if (isPlay) {
+						if (path.endsWith(".mp3") || path.endsWith(".wav")) {
+							System.out.println(pauseTime1);
+							if (pauseTime1 == 0)
+								ap.playA(path);
+							else
+								ap.resume(0, path);
+						} else {
+							GUIKontroler.prikaziPorukuGreska("Uneti falj moze biti mp3 ili wav.");
+							return;
+						}
+
+					} else {
+						if (path.endsWith(".mp3") || path.endsWith(".wav")) {
+							pauseTime1 = ap.pause();
+						}
 					}
-					
-				} else {
-					
-					if (path.endsWith(".mp3") || path.endsWith(".wav"))
-						pauseTime = ap.pause();	
-//				}else {
-//				GUIKontroler.prikaziPorukuGreska("Uneti fajl ne sme imati null vrednost. Ponovite unos.");
-//				return;
-//			}	
-				}		
-				}	}
+				}
+			}
 		});
 
-		label1.setBounds(53, 45, 120, 120);
+		label1.setBounds(53, 52, 120, 120);
 		GUIKontroler.guiButtonComponentInitializer(label1, "playButton_1_up.png");
 		contentPane.add(label1);
 
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
 		textPane.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 24));
-		textPane.setBounds(205, 47, 560, 115);
+		textPane.setBounds(205, 54, 560, 115);
 		textPane.setOpaque(false);
 		contentPane.add(textPane);
 
@@ -140,12 +136,13 @@ public class AVGUIMainWindow extends JFrame {
 			public void mouseReleased(MouseEvent e) {
 
 				if (GUIKontroler.enabled) {
+					stop();
 					GUIKontroler.Convert();
 				}
 
 			}
 		});
-		lblConvert.setBounds(796, 130, 135, 40);
+		lblConvert.setBounds(796, 137, 135, 40);
 		contentPane.add(lblConvert);
 		lblConvert.setPreferredSize(new Dimension(133, 40));
 		GUIKontroler.guiButtonComponentInitializer(lblConvert, "convert_up.png");
@@ -153,14 +150,13 @@ public class AVGUIMainWindow extends JFrame {
 		lblOpen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-
-				if (GUIKontroler.enabled)
+				if (GUIKontroler.enabled) {
 					GUIKontroler.showOpenDialog(textPane);
-
-
+					stop();
+				}
 			}
 		});
-		lblOpen.setBounds(796, 40, 135, 40);
+		lblOpen.setBounds(796, 47, 135, 40);
 		contentPane.add(lblOpen);
 		lblOpen.setPreferredSize(new Dimension(133, 40));
 		GUIKontroler.guiButtonComponentInitializer(lblOpen, "open_up.png");
@@ -172,7 +168,7 @@ public class AVGUIMainWindow extends JFrame {
 			}
 		});
 		labelMp4.setPreferredSize(new Dimension(133, 40));
-		labelMp4.setBounds(795, 90, 32, 32);
+		labelMp4.setBounds(795, 97, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(labelMp4, "mp4_up.png");
 		contentPane.add(labelMp4);
 
@@ -183,7 +179,7 @@ public class AVGUIMainWindow extends JFrame {
 			}
 		});
 		labelmp3.setPreferredSize(new Dimension(133, 40));
-		labelmp3.setBounds(830, 90, 32, 32);
+		labelmp3.setBounds(830, 97, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(labelmp3, "mp3_up.png");
 		contentPane.add(labelmp3);
 
@@ -194,13 +190,13 @@ public class AVGUIMainWindow extends JFrame {
 			}
 		});
 		labelwav.setPreferredSize(new Dimension(133, 40));
-		labelwav.setBounds(865, 90, 32, 32);
+		labelwav.setBounds(865, 97, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(labelwav, "wav_up.png");
 		contentPane.add(labelwav);
 
 		JLabel lblAvi = new JLabel("avi");
 		lblAvi.setPreferredSize(new Dimension(133, 40));
-		lblAvi.setBounds(900, 90, 32, 32);
+		lblAvi.setBounds(900, 97, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(lblAvi, "avi_up.png");
 		contentPane.add(lblAvi);
 
@@ -216,7 +212,7 @@ public class AVGUIMainWindow extends JFrame {
 		});
 
 		lblAbout.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
-		lblAbout.setBounds(85, 5, 70, 25);
+		lblAbout.setBounds(85, 12, 70, 25);
 		GUIKontroler.guiButtonComponentInitializer(lblAbout, "about_up.png");
 		contentPane.add(lblAbout);
 
@@ -228,16 +224,20 @@ public class AVGUIMainWindow extends JFrame {
 					System.exit(0);
 			}
 		});
-		lblClose.setBounds(861, 5, 70, 25);
+		lblClose.setBounds(861, 12, 70, 25);
 		GUIKontroler.guiButtonComponentInitializer(lblClose, "close_up.png");
 		contentPane.add(lblClose);
 
 		JLabel lblFile = new JLabel("file");
 		lblFile.addMouseListener(new MouseAdapter() {
 
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				GUIKontroler.setGuiComponentImage(lblFile, "file_down.png");
+			}
 		});
 		lblFile.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
-		lblFile.setBounds(9, 5, 70, 25);
+		lblFile.setBounds(9, 12, 70, 25);
 		GUIKontroler.guiButtonComponentInitializer(lblFile, "file_up.png");
 		contentPane.add(lblFile);
 
@@ -247,13 +247,14 @@ public class AVGUIMainWindow extends JFrame {
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (GUIKontroler.enabled)
+				if (GUIKontroler.enabled) {
 					GUIKontroler.showOpenDialog(textPane);
+					stop();
+				}
 			}
 		});
 		mntmOpen.setIcon(
 				new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/file.gif")));
-		mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		popupMenu.add(mntmOpen);
 
 		JMenuItem mntmConvert = new JMenuItem("Convert");
@@ -265,7 +266,6 @@ public class AVGUIMainWindow extends JFrame {
 		});
 		mntmConvert.setIcon(
 				new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
-		mntmConvert.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		popupMenu.add(mntmConvert);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -277,7 +277,6 @@ public class AVGUIMainWindow extends JFrame {
 		});
 		mntmExit.setIcon(
 				new ImageIcon(AVGUIMainWindow.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
-		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.ALT_MASK));
 		popupMenu.add(mntmExit);
 
 		JLabel lblForward = new JLabel("forward");
@@ -285,12 +284,12 @@ public class AVGUIMainWindow extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 
-				if (GUIKontroler.enabled)
+				if (GUIKontroler.enabled && getOpen() != null)
 					ap.rewind(100000);
 
 			}
 		});
-		lblForward.setBounds(16, 92, 32, 32);
+		lblForward.setBounds(16, 99, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(lblForward, "fastforward_up.png");
 		contentPane.add(lblForward);
 
@@ -298,13 +297,12 @@ public class AVGUIMainWindow extends JFrame {
 		lblStop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-
-				if (GUIKontroler.enabled)
-					ap.stop();
-
+				if (GUIKontroler.enabled) {
+					stop();
+				}
 			}
 		});
-		lblStop.setBounds(17, 50, 32, 32);
+		lblStop.setBounds(17, 57, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(lblStop, "stop_up.png");
 		contentPane.add(lblStop);
 
@@ -312,11 +310,11 @@ public class AVGUIMainWindow extends JFrame {
 		lblBackward.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (GUIKontroler.enabled)
+				if (GUIKontroler.enabled && getOpen() != null)
 					ap.rewind(-100000);
 			}
 		});
-		lblBackward.setBounds(16, 133, 32, 32);
+		lblBackward.setBounds(16, 140, 32, 32);
 		GUIKontroler.guiButtonComponentInitializer(lblBackward, "rewind_up.png");
 		contentPane.add(lblBackward);
 
@@ -328,7 +326,7 @@ public class AVGUIMainWindow extends JFrame {
 		lblBg.addMouseMotionListener(mml);
 
 		JLabel lblPlaceholder = new JLabel("PLACEHOLDER");
-		lblPlaceholder.setBounds(200, 42, 570, 125);
+		lblPlaceholder.setBounds(200, 49, 570, 125);
 		GUIKontroler.guiComponentInitializer(lblPlaceholder, "info_section.png");
 		contentPane.add(lblPlaceholder);
 		contentPane.add(lblBg);
@@ -337,6 +335,12 @@ public class AVGUIMainWindow extends JFrame {
 		GUIKontroler.formats.add(labelwav);
 		GUIKontroler.formats.add(lblAvi);
 		GUIKontroler.contentPane = contentPane;
+	}
+
+	public void stop() {
+		ap.stop();
+		GUIKontroler.setGuiComponentImage(label1, "playButton_1_up.png");
+		pauseTime1 = 0;
 	}
 
 	public void setOpen(File open) {
@@ -372,7 +376,6 @@ public class AVGUIMainWindow extends JFrame {
 					if (SwingUtilities.isLeftMouseButton(e)) {
 						showMenu(e);
 					}
-
 
 			}
 
